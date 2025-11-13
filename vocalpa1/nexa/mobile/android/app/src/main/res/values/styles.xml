@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+        
+        <!-- Navigation bar color -->
+        <item name="android:navigationBarColor">@color/background</item>
+        
+        <!-- Window background -->
+        <item name="android:windowBackground">@color/background</item>
+        
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        
+        <!-- Enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        
+        <!-- Enable shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+    </style>
+
+    <!-- Splash screen theme -->
+    <style name="SplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:navigationBarColor">@color/primary</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- Button styles -->
+    <style name="NexaButton" parent="Widget.AppCompat.Button">
+        <item name="android:layout_height">48dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:stateListAnimator">@animator/button_state_animator</item>
+    </style>
+
+    <style name="NexaButton.Primary">
+        <item name="android:backgroundTint">@color/primary</item>
+    </style>
+
+    <style name="NexaButton.Secondary">
+        <item name="android:backgroundTint">@color/secondary</item>
+    </style>
+
+    <style name="NexaButton.Outline" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_height">48dp</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="strokeColor">@color/primary</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
+
+    <!-- Text styles -->
+    <style name="NexaText">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="fontFamily">@font/inter_regular</item>
+    </style>
+
+    <style name="NexaText.Headline1">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/inter_bold</item>
+    </style>
+
+    <style name="NexaText.Headline2">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/inter_bold</item>
+    </style>
+
+    <style name="NexaText.Headline3">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/inter_semibold</item>
+    </style>
+
+    <style name="NexaText.Body1">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/inter_regular</item>
+    </style>
+
+    <style name="NexaText.Body2">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/inter_regular</item>
+    </style>
+
+    <style name="NexaText.Caption">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="fontFamily">@font/inter_regular</item>
+    </style>
+
+    <!-- Card styles -->
+    <style name="NexaCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardBackgroundColor">@color/surface</item>
+        <item name="contentPadding">16dp</item>
+    </style>
+
+    <!-- Input field styles -->
+    <style name="NexaEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_height">48dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:background">@drawable/edittext_background</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorHint">@color/text_secondary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Microphone button style -->
+    <style name="MicrophoneButton">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:background">@drawable/microphone_button_background</item>
+        <item name="android:elevation">8dp</item>
+        <item name="android:stateListAnimator">@animator/microphone_button_animator</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:src">@drawable/ic_microphone</item>
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <!-- Quick action button style -->
+    <style name="QuickActionButton">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:background">@drawable/quick_action_background</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <!-- Status indicator style -->
+    <style name="StatusIndicator">
+        <item name="android:layout_width">12dp</item>
+        <item name="android:layout_height">12dp</item>
+        <item name="android:background">@drawable/status_indicator_background</item>
+    </style>
+
+    <!-- Toolbar style -->
+    <style name="NexaToolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/primary</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <!-- Bottom sheet style -->
+    <style name="NexaBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_sheet_background</item>
+    </style>
+
+    <!-- Dialog style -->
+    <style name="NexaDialog" parent="Theme.AppCompat.DayNight.Dialog">
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+
+    <!-- Progress bar style -->
+    <style name="NexaProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressTint">@color/primary</item>
+        <item name="android:progressBackgroundTint">@color/primary_light</item>
+        <item name="android:indeterminateTint">@color/primary</item>
+    </style>
+
+    <!-- Switch style -->
+    <style name="NexaSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:thumbTint">@color/switch_thumb_color</item>
+        <item name="android:trackTint">@color/switch_track_color</item>
+    </style>
+
+    <!-- Floating Action Button style -->
+    <style name="NexaFAB" parent="Widget.Design.FloatingActionButton">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:tint">@color/white</item>
+        <item name="elevation">6dp</item>
+        <item name="pressedTranslationZ">12dp</item>
+    </style>
+</resources>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexa - Voice Assistant (Working)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        .status {
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .mic-button {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #ff4757;
+            border: none;
+            color: white;
+            font-size: 2em;
+            cursor: pointer;
+            margin: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 71, 87, 0.4);
+        }
+        .mic-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(255, 71, 87, 0.6);
+        }
+        .mic-button.listening {
+            background: #2ed573;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .response {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .test-buttons {
+            margin: 20px 0;
+        }
+        .test-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .test-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .connected { background: #2ed573; }
+        .disconnected { background: #ff4757; }
+    </style>
+</head>
+<body>
+    <div class="connection-status" id="connectionStatus">🔄 Connecting...</div>
+    
+    <div class="container">
+        <h1>🤖 Nexa</h1>
+        <div class="status" id="status">Testing backend connection...</div>
+        
+        <button class="mic-button" id="micButton" onclick="toggleListening()">🎤</button>
+        
+        <div class="response" id="response">
+            Click the microphone and say something!
+        </div>
+        
+        <div class="test-buttons">
+            <button class="test-btn" onclick="testCommand('hello nexa')">Test: Hello</button>
+            <button class="test-btn" onclick="testCommand('what time is it')">Test: Time</button>
+            <button class="test-btn" onclick="testBackend()">Test Backend</button>
+        </div>
+    </div>
+
+    <script>
+        const BACKEND_URL = 'http://localhost:8000';
+        let isListening = false;
+        let recognition = null;
+
+        // Initialize speech recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = function() {
+                    console.log('Speech recognition started');
+                    document.getElementById('micButton').classList.add('listening');
+                    document.getElementById('response').textContent = 'Listening...';
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    console.log('Heard:', transcript);
+                    document.getElementById('response').textContent = `You said: "${transcript}"`;
+                    sendCommand(transcript);
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    document.getElementById('response').textContent = `Error: ${event.error}`;
+                    stopListening();
+                };
+
+                recognition.onend = function() {
+                    console.log('Speech recognition ended');
+                    stopListening();
+                };
+
+                return true;
+            } else {
+                document.getElementById('response').textContent = 'Speech recognition not supported in this browser';
+                return false;
+            }
+        }
+
+        // Toggle listening
+        function toggleListening() {
+            if (!recognition) {
+                if (!initSpeechRecognition()) return;
+            }
+
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        }
+
+        function startListening() {
+            if (recognition) {
+                isListening = true;
+                recognition.start();
+            }
+        }
+
+        function stopListening() {
+            isListening = false;
+            if (recognition) {
+                recognition.stop();
+            }
+            document.getElementById('micButton').classList.remove('listening');
+        }
+
+        // Send command to backend
+        async function sendCommand(command) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/voice/command`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ command: command })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('response').textContent = data.response || 'Command processed successfully';
+                    
+                    // Text-to-speech response
+                    if ('speechSynthesis' in window && data.response) {
+                        const utterance = new SpeechSynthesisUtterance(data.response);
+                        speechSynthesis.speak(utterance);
+                    }
+                } else {
+                    document.getElementById('response').textContent = `Backend error: ${response.status}`;
+                }
+            } catch (error) {
+                console.error('Error sending command:', error);
+                document.getElementById('response').textContent = `Connection error: ${error.message}`;
+            }
+        }
+
+        // Test command without speech recognition
+        function testCommand(command) {
+            document.getElementById('response').textContent = `Testing: "${command}"`;
+            sendCommand(command);
+        }
+
+        // Test backend connection
+        async function testBackend() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/health`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('response').textContent = `Backend connected! Status: ${data.status}`;
+                    updateConnectionStatus(true);
+                } else {
+                    document.getElementById('response').textContent = `Backend error: ${response.status}`;
+                    updateConnectionStatus(false);
+                }
+            } catch (error) {
+                document.getElementById('response').textContent = `Connection failed: ${error.message}`;
+                updateConnectionStatus(false);
+            }
+        }
+
+        // Update connection status
+        function updateConnectionStatus(connected) {
+            const statusEl = document.getElementById('connectionStatus');
+            const statusTextEl = document.getElementById('status');
+            
+            if (connected) {
+                statusEl.textContent = '✅ Connected';
+                statusEl.className = 'connection-status connected';
+                statusTextEl.textContent = 'Backend connected! Ready for voice commands.';
+            } else {
+                statusEl.textContent = '❌ Disconnected';
+                statusEl.className = 'connection-status disconnected';
+                statusTextEl.textContent = 'Backend not connected. Check if server is running.';
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            console.log('Nexa Voice Assistant loaded');
+            
+            // Test backend connection immediately
+            testBackend();
+            
+            // Initialize speech recognition
+            initSpeechRecognition();
+            
+            console.log('Initialization complete');
+        });
+    </script>
+</body>
+</html>

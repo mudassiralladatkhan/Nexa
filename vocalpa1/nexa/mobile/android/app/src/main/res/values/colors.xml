@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nexa brand colors -->
+    <color name="primary">#6366F1</color>
+    <color name="primary_dark">#4F46E5</color>
+    <color name="primary_light">#818CF8</color>
+    
+    <color name="secondary">#10B981</color>
+    <color name="secondary_dark">#059669</color>
+    <color name="secondary_light">#34D399</color>
+    
+    <color name="accent">#F59E0B</color>
+    <color name="accent_dark">#D97706</color>
+    <color name="accent_light">#FBBF24</color>
+    
+    <!-- Status colors -->
+    <color name="success">#10B981</color>
+    <color name="warning">#F59E0B</color>
+    <color name="error">#EF4444</color>
+    <color name="info">#3B82F6</color>
+    
+    <!-- Neutral colors (Light theme) -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    
+    <color name="gray_50">#F8FAFC</color>
+    <color name="gray_100">#F1F5F9</color>
+    <color name="gray_200">#E2E8F0</color>
+    <color name="gray_300">#CBD5E1</color>
+    <color name="gray_400">#94A3B8</color>
+    <color name="gray_500">#64748B</color>
+    <color name="gray_600">#475569</color>
+    <color name="gray_700">#334155</color>
+    <color name="gray_800">#1E293B</color>
+    <color name="gray_900">#0F172A</color>
+    
+    <!-- Background colors -->
+    <color name="background">@color/white</color>
+    <color name="background_secondary">@color/gray_50</color>
+    <color name="surface">@color/white</color>
+    <color name="surface_variant">@color/gray_100</color>
+    
+    <!-- Text colors -->
+    <color name="text_primary">@color/gray_900</color>
+    <color name="text_secondary">@color/gray_600</color>
+    <color name="text_tertiary">@color/gray_400</color>
+    <color name="text_inverse">@color/white</color>
+    
+    <!-- Border colors -->
+    <color name="border">@color/gray_200</color>
+    <color name="border_light">@color/gray_100</color>
+    <color name="divider">@color/gray_200</color>
+    
+    <!-- Overlay colors -->
+    <color name="overlay_light">#80FFFFFF</color>
+    <color name="overlay_dark">#80000000</color>
+    <color name="scrim">#60000000</color>
+    
+    <!-- Component specific colors -->
+    <color name="microphone_button">@color/primary</color>
+    <color name="microphone_button_active">@color/primary_light</color>
+    <color name="quick_action_weather">@color/primary</color>
+    <color name="quick_action_news">@color/secondary</color>
+    <color name="quick_action_music">#8B5CF6</color>
+    <color name="quick_action_time">@color/accent</color>
+    <color name="quick_action_calculator">#EF4444</color>
+    <color name="quick_action_help">@color/gray_500</color>
+    
+    <!-- Voice visualizer colors -->
+    <color name="voice_wave_listening">@color/primary</color>
+    <color name="voice_wave_speaking">@color/secondary</color>
+    <color name="voice_wave_idle">@color/gray_400</color>
+    
+    <!-- Status indicator colors -->
+    <color name="status_connected">@color/success</color>
+    <color name="status_disconnected">@color/error</color>
+    <color name="status_connecting">@color/warning</color>
+    
+    <!-- Switch colors -->
+    <color name="switch_thumb_color">@color/primary</color>
+    <color name="switch_track_color">@color/primary_light</color>
+    
+    <!-- Gradient colors -->
+    <color name="gradient_start">#6366F1</color>
+    <color name="gradient_middle">#8B5CF6</color>
+    <color name="gradient_end">#A855F7</color>
+    
+    <!-- Shadow colors -->
+    <color name="shadow_light">#1A000000</color>
+    <color name="shadow_medium">#33000000</color>
+    <color name="shadow_dark">#4D000000</color>
+    
+    <!-- Ripple effect colors -->
+    <color name="ripple_light">#1A6366F1</color>
+    <color name="ripple_dark">#336366F1</color>
+    
+    <!-- Selection colors -->
+    <color name="selection_highlight">#336366F1</color>
+    <color name="selection_background">#1A6366F1</color>
+    
+    <!-- Card colors -->
+    <color name="card_background">@color/white</color>
+    <color name="card_border">@color/gray_200</color>
+    
+    <!-- Input field colors -->
+    <color name="input_background">@color/white</color>
+    <color name="input_border">@color/gray_300</color>
+    <color name="input_border_focused">@color/primary</color>
+    <color name="input_text">@color/gray_900</color>
+    <color name="input_hint">@color/gray_500</color>
+    
+    <!-- Button colors -->
+    <color name="button_primary">@color/primary</color>
+    <color name="button_primary_pressed">@color/primary_dark</color>
+    <color name="button_secondary">@color/secondary</color>
+    <color name="button_secondary_pressed">@color/secondary_dark</color>
+    <color name="button_outline">@color/transparent</color>
+    <color name="button_outline_border">@color/primary</color>
+    
+    <!-- Notification colors -->
+    <color name="notification_background">@color/primary</color>
+    <color name="notification_text">@color/white</color>
+    
+    <!-- Conversation bubble colors -->
+    <color name="bubble_user">@color/primary</color>
+    <color name="bubble_assistant">@color/gray_100</color>
+    <color name="bubble_user_text">@color/white</color>
+    <color name="bubble_assistant_text">@color/gray_900</color>
+</resources>

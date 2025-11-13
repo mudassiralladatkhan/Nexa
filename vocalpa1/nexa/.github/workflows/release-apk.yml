@@ -1,0 +1,119 @@
+name: Release Nexa APK
+
+on:
+  release:
+    types: [published]
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: mobile/package.json
+        
+    - name: ☕ Setup Java JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: 🤖 Setup Android SDK
+      uses: android-actions/setup-android@v3
+      
+    - name: 📦 Install Android SDK Components
+      run: |
+        sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+        sdkmanager "ndk;25.1.8937393"
+        
+    - name: 📱 Install Dependencies
+      working-directory: ./mobile
+      run: npm ci
+      
+    - name: 🔧 Setup Gradle
+      working-directory: ./mobile/android
+      run: chmod +x gradlew
+      
+    - name: 📋 Create local.properties
+      working-directory: ./mobile/android
+      run: |
+        echo "sdk.dir=$ANDROID_HOME" > local.properties
+        echo "ndk.dir=$ANDROID_HOME/ndk/25.1.8937393" >> local.properties
+        
+    - name: 🎯 Bundle JavaScript
+      working-directory: ./mobile
+      run: |
+        mkdir -p android/app/src/main/assets
+        npx react-native bundle \
+          --platform android \
+          --dev false \
+          --entry-file index.js \
+          --bundle-output android/app/src/main/assets/index.android.bundle \
+          --assets-dest android/app/src/main/res
+          
+    - name: 🔨 Build Debug APK
+      working-directory: ./mobile/android
+      run: ./gradlew assembleDebug --no-daemon
+      
+    - name: 🚀 Build Release APK
+      working-directory: ./mobile/android
+      run: ./gradlew assembleRelease --no-daemon
+      
+    - name: 📝 Get Release Info
+      id: release_info
+      run: |
+        echo "tag_name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        echo "release_name=Nexa Voice Assistant ${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        
+    - name: 📤 Upload Release Assets
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          mobile/android/app/build/outputs/apk/debug/app-debug.apk
+          mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk
+        name: ${{ steps.release_info.outputs.release_name }}
+        body: |
+          ## 🤖 Nexa Voice Assistant ${{ steps.release_info.outputs.tag_name }}
+          
+          ### 📱 APK Downloads
+          - **app-debug.apk**: Debug version for testing
+          - **app-release-unsigned.apk**: Release version (unsigned)
+          
+          ### ✨ Features
+          - 🎤 Voice Recognition & Text-to-Speech
+          - 📱 58+ App Launcher with Android APK support
+          - 🌐 100+ Website Opener with smart matching
+          - 🎭 Entertainment System (jokes, facts, quotes, riddles)
+          - 🌤️ Weather, News, Music API integrations
+          - 🔄 Cross-platform compatibility
+          
+          ### 📋 Installation
+          1. Download the APK file
+          2. Enable "Install from Unknown Sources" in Android Settings
+          3. Install the APK
+          4. Grant microphone permissions
+          5. Start using voice commands!
+          
+          ### 🎤 Voice Commands to Try
+          - "Hello Nexa"
+          - "What time is it?"
+          - "Open YouTube"
+          - "Tell me a joke"
+          - "Go to Google"
+          
+          ---
+          **Built with GitHub Actions** 🚀
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

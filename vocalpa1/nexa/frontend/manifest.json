@@ -1,0 +1,193 @@
+{
+  "name": "Nexa Voice Assistant",
+  "short_name": "Nexa",
+  "description": "Your Personal AI Voice Assistant - Python-powered voice commands, weather, news, music control and more",
+  "version": "1.0.0",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#6366F1",
+  "background_color": "#FFFFFF",
+  "scope": "/",
+  "lang": "en-US",
+  "dir": "ltr",
+  
+  "icons": [
+    {
+      "src": "icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "screenshots/desktop-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Nexa Voice Assistant - Desktop View"
+    },
+    {
+      "src": "screenshots/mobile-1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Nexa Voice Assistant - Mobile View"
+    }
+  ],
+  
+  "categories": [
+    "productivity",
+    "utilities",
+    "lifestyle"
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "Start Listening",
+      "short_name": "Listen",
+      "description": "Start voice recognition",
+      "url": "/?action=listen",
+      "icons": [
+        {
+          "src": "icons/mic-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Weather",
+      "short_name": "Weather",
+      "description": "Get weather information",
+      "url": "/?action=weather",
+      "icons": [
+        {
+          "src": "icons/weather-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "News",
+      "short_name": "News",
+      "description": "Get latest news",
+      "url": "/?action=news",
+      "icons": [
+        {
+          "src": "icons/news-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Music",
+      "short_name": "Music",
+      "description": "Control music playback",
+      "url": "/?action=music",
+      "icons": [
+        {
+          "src": "icons/music-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://nexa-voice-assistant.netlify.app/manifest.json"
+    }
+  ],
+  
+  "prefer_related_applications": false,
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+nexa",
+      "url": "/?command=%s"
+    }
+  ],
+  
+  "file_handlers": [
+    {
+      "action": "/handle-audio",
+      "accept": {
+        "audio/*": [".wav", ".mp3", ".ogg", ".m4a"]
+      }
+    }
+  ],
+  
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "audio",
+          "accept": ["audio/*"]
+        }
+      ]
+    }
+  },
+  
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  
+  "handle_links": "preferred",
+  
+  "capture_links": "existing-client-navigate"
+}

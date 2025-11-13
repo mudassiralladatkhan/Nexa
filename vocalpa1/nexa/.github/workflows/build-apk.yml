@@ -1,0 +1,128 @@
+name: Build Nexa Android APK
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+        - debug
+        - release
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: mobile/package.json
+        
+    - name: ☕ Setup Java JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: 🤖 Setup Android SDK
+      uses: android-actions/setup-android@v3
+      
+    - name: 📦 Install Android SDK Components
+      run: |
+        sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+        sdkmanager "ndk;25.1.8937393"
+        
+    - name: 📱 Install React Native Dependencies
+      working-directory: ./mobile
+      run: |
+        npm ci
+        
+    - name: 🔧 Setup Gradle Wrapper
+      working-directory: ./mobile/android
+      run: |
+        chmod +x gradlew
+        
+    - name: 📋 Create local.properties
+      working-directory: ./mobile/android
+      run: |
+        echo "sdk.dir=$ANDROID_HOME" > local.properties
+        echo "ndk.dir=$ANDROID_HOME/ndk/25.1.8937393" >> local.properties
+        
+    - name: 🎯 Bundle JavaScript
+      working-directory: ./mobile
+      run: |
+        mkdir -p android/app/src/main/assets
+        npx react-native bundle \
+          --platform android \
+          --dev false \
+          --entry-file index.js \
+          --bundle-output android/app/src/main/assets/index.android.bundle \
+          --assets-dest android/app/src/main/res
+          
+    - name: 🔨 Build Debug APK
+      if: ${{ github.event.inputs.build_type == 'debug' || github.event.inputs.build_type == '' }}
+      working-directory: ./mobile/android
+      run: |
+        ./gradlew assembleDebug --no-daemon --stacktrace
+        
+    - name: 🚀 Build Release APK
+      if: ${{ github.event.inputs.build_type == 'release' }}
+      working-directory: ./mobile/android
+      run: |
+        ./gradlew assembleRelease --no-daemon --stacktrace
+        
+    - name: 📤 Upload Debug APK
+      if: ${{ github.event.inputs.build_type == 'debug' || github.event.inputs.build_type == '' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: nexa-debug-apk
+        path: mobile/android/app/build/outputs/apk/debug/*.apk
+        retention-days: 30
+        
+    - name: 📤 Upload Release APK
+      if: ${{ github.event.inputs.build_type == 'release' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: nexa-release-apk
+        path: mobile/android/app/build/outputs/apk/release/*.apk
+        retention-days: 90
+        
+    - name: 📊 APK Info
+      run: |
+        echo "## 📱 APK Build Complete!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Build Information:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Build Type**: ${{ github.event.inputs.build_type || 'debug' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Build Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ -f "mobile/android/app/build/outputs/apk/debug/app-debug.apk" ]; then
+          APK_SIZE=$(stat -c%s "mobile/android/app/build/outputs/apk/debug/app-debug.apk")
+          APK_SIZE_MB=$((APK_SIZE / 1024 / 1024))
+          echo "- **Debug APK Size**: ${APK_SIZE_MB} MB" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ -f "mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk" ]; then
+          APK_SIZE=$(stat -c%s "mobile/android/app/build/outputs/apk/release/app-release-unsigned.apk")
+          APK_SIZE_MB=$((APK_SIZE / 1024 / 1024))
+          echo "- **Release APK Size**: ${APK_SIZE_MB} MB" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📥 Download:" >> $GITHUB_STEP_SUMMARY
+        echo "The APK file is available in the **Artifacts** section of this workflow run." >> $GITHUB_STEP_SUMMARY

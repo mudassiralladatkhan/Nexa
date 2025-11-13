@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+plugins {
+    id("com.facebook.react.settings")
+}
+
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex ->
+    if (System.getenv('REACT_NATIVE_MAVEN_LOCAL_REPO') != null) {
+        ex.autolinkLibrariesFromCommand()
+    } else {
+        ex.autolinkLibrariesFromCommand()
+    }
+}
+
+rootProject.name = 'NexaMobile'
+include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')

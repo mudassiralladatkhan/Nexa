@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexa Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .status {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .success { background: #2d5a2d; }
+        .error { background: #5a2d2d; }
+        .loading { background: #2d4a5a; }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover { background: #45a049; }
+        #response {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 Nexa Backend Connection Test</h1>
+    
+    <div id="status" class="status loading">
+        🔄 Testing connection to backend...
+    </div>
+    
+    <div>
+        <button onclick="testHealth()">Test Health</button>
+        <button onclick="testAPI()">Test API</button>
+        <button onclick="testVoiceCommand()">Test Voice Command</button>
+    </div>
+    
+    <div id="response"></div>
+    
+    <script>
+        const BACKEND_URL = 'http://localhost:8001';
+        
+        async function testConnection() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/`);
+                const data = await response.json();
+                
+                document.getElementById('status').className = 'status success';
+                document.getElementById('status').innerHTML = '✅ Connected to Nexa Backend!<br>' + 
+                    `Status: ${data.status}<br>Message: ${data.message}`;
+                    
+                return true;
+            } catch (error) {
+                document.getElementById('status').className = 'status error';
+                document.getElementById('status').innerHTML = '❌ Cannot connect to backend<br>' + 
+                    `Error: ${error.message}<br>Make sure backend is running on port 8001`;
+                return false;
+            }
+        }
+        
+        async function testHealth() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/health`);
+                const data = await response.json();
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        async function testAPI() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/test`);
+                const data = await response.json();
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        async function testVoiceCommand() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/voice/command`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        command: 'hello nexa'
+                    })
+                });
+                const data = await response.json();
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('response').textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        // Test connection on page load
+        testConnection();
+    </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Google Play Services version -->
+    <!-- Note: This is a placeholder. If using Google Play Services, 
+         you need to add the dependency and use the actual version -->
+    <integer name="google_play_services_version">12451000</integer>
+</resources>
+
